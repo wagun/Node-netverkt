@@ -1,0 +1,35 @@
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mesa-trade-sim"
+version = "0.1.0"
+description = "Two-goods trade simulation using Mesa"
+authors = [{name="You"}]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "mesa>=2.2",
+    "networkx>=3.0",
+    "pandas>=2.0",
+]
+
+[tool.poetry]
+name = "mesa-trade-sim"
+version = "0.1.0"
+description = "Two-goods trade simulation using Mesa"
+authors = ["You <you@example.com>"]
+packages = [{ include = "sim", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+mesa = ">=2.2"
+networkx = ">=3.0"
+pandas = ">=2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+black = "^24.0.0"
+ruff = "^0.5.0"

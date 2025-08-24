@@ -1,0 +1,4 @@
+
+mesa>=2.2
+networkx>=3.0
+pandas>=2.0
