@@ -1,4 +1,5 @@
 mesa>=2.2
+mesa-visualization>=3.0
 networkx>=3.0
 pandas>=2.0
 matplotlib>=3.0
