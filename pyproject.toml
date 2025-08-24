@@ -9,7 +9,7 @@ version = "0.1.0"
 description = "Two-goods trade simulation using Mesa"
 authors = [{name="You"}]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 dependencies = [
     "mesa>=2.2",
     "mesa-visualization>=3.0",
