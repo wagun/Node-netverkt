@@ -11,12 +11,9 @@ authors = [{name="You"}]
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-    "mesa>=2.2",
-    "mesa-visualization>=3.0",
+    "mesa[visualization]>=3.0",
     "networkx>=3.0",
     "pandas>=2.0",
-    "matplotlib>=3.0",
-    "solara>=1.0",
     "neo4j>=5.0",
     "altair>=5.0",
 ]
@@ -30,12 +27,9 @@ packages = [{ include = "sim", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-mesa = ">=2.2"
-mesa-visualization = ">=3.0"
+mesa = {version = ">=3.0", extras = ["visualization"]}
 networkx = ">=3.0"
 pandas = ">=2.0"
-matplotlib = ">=3.0"
-solara = ">=1.0"
 neo4j = ">=5.0"
 altair = ">=5.0"
 
