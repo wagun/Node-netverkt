@@ -9,7 +9,7 @@ version = "0.1.0"
 description = "Two-goods trade simulation using Mesa"
 authors = [{name="You"}]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
     "mesa[visualization]>=3.0",
     "networkx>=3.0",
