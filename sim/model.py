@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 import random
 import networkx as nx
 from mesa import Agent, Model
@@ -58,8 +58,6 @@ class Trader(Agent):
         wants = [g for g in self.model.goods if g != self.specialty]
         if not wants:
             return
-        desired = random.choice(wants)
-
         my_price = self.quote_price(self.specialty)
         their_price = partner.quote_price(partner.specialty)
 

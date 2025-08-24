@@ -1,8 +1,13 @@
 
-from mesa.visualization.modules import NetworkModule, ChartModule
-from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.UserParam import UserSettableParameter
-import networkx as nx
+try:
+    from mesa.visualization.modules import NetworkModule, ChartModule
+    from mesa.visualization.ModularVisualization import ModularServer
+    from mesa.visualization.UserParam import UserSettableParameter
+except ModuleNotFoundError as e:
+    raise ModuleNotFoundError(
+        "Mesa visualization components are missing. "
+        "Please install the 'mesa-visualization' package and its dependencies, e.g. matplotlib."
+    ) from e
 from sim.model import TradeModel
 
 def network_portrayal(G):
