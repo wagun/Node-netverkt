@@ -1,11 +1,15 @@
 import os
 from neo4j import GraphDatabase
 
-# Connect to local Neo4j instance
-URI = "neo4j+s://54735458.databases.neo4j.io"
+# Connect to Neo4j instance using environment variables
+URI = os.getenv("NEO4J_URI")
+if URI is None:
+    raise EnvironmentError("NEO4J_URI environment variable not set")
+
 PASSWORD = os.getenv("NEO4J_PASSWORD")
 if PASSWORD is None:
     raise EnvironmentError("NEO4J_PASSWORD environment variable not set")
+
 AUTH = ("neo4j", PASSWORD)
 
 driver = GraphDatabase.driver(URI, auth=AUTH)
