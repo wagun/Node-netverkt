@@ -85,23 +85,37 @@ class Trader(Agent):
                 self.model.trades_this_tick += 1
 
 class TradeModel(Model):
-    def __init__(self, N: int, p_edge: float, goods: Goods = ("wheat", "iron"), seed: int | None = None):
+    def __init__(
+        self,
+        N: int,
+        p_edge: float,
+        goods: Goods = ("wheat", "iron"),
+        seed: int | None = None,
+        graph: nx.Graph | None = None,
+    ):
         super().__init__()
         if seed is not None:
             random.seed(seed)
             self._seed = seed
         self.goods = goods
-        self.G = nx.erdos_renyi_graph(N, p_edge, seed=seed)
+
+        # Use provided graph or generate a random one
+        if graph is None:
+            self.G = nx.erdos_renyi_graph(N, p_edge, seed=seed)
+        else:
+            self.G = graph
+            N = self.G.number_of_nodes()
+
         self.grid = NetworkGrid(self.G)
         self.schedule = RandomActivation(self)
         self.trades_this_tick = 0
 
         # create agents, half specialize in good0, half in good1
-        for i in range(N):
-            specialty = goods[i % len(goods)]
-            a = Trader(i, self, specialty=specialty)
+        for idx, node in enumerate(self.G.nodes()):
+            specialty = goods[idx % len(goods)]
+            a = Trader(node, self, specialty=specialty)
             self.schedule.add(a)
-            self.grid.place_agent(a, i)
+            self.grid.place_agent(a, node)
 
         self.datacollector = DataCollector(
             model_reporters={
