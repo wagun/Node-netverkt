@@ -17,6 +17,7 @@ dependencies = [
     "matplotlib>=3.0",
     "solara>=1.0",
     "neo4j>=5.0",
+    "altair>=5.0",
 ]
 
 [tool.poetry]
@@ -34,6 +35,7 @@ pandas = ">=2.0"
 matplotlib = ">=3.0"
 solara = ">=1.0"
 neo4j = ">=5.0"
+altair = ">=5.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
