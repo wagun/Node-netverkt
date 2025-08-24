@@ -2,3 +2,4 @@ mesa>=2.2
 networkx>=3.0
 pandas>=2.0
 matplotlib>=3.0
+neo4j>=5.0
