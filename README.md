@@ -3,12 +3,14 @@
 
 A minimal, git-ready starter for a two-goods trade & information-flow simulation using [Mesa](https://mesa.readthedocs.io/) and NetworkX.
 
+**Note:** Mesa's visualization components rely on Solara, which currently supports Python versions up to 3.12.
+
 ## Quick start (pip + venv)
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -U pip
-pip install -r requirements.txt
+pip install -r requirements.txt  # installs Mesa with visualization extras
 python -m sim.run --steps 50 --agents 50 --p_edge 0.1
 ```
 
@@ -20,7 +22,7 @@ poetry run python -m sim.run --steps 50 --agents 50 --p_edge 0.1
 
 ## Run with visualization (optional)
 ```bash
-python -m sim.viz --agents 50 --p_edge 0.1
+python -m sim.viz --agents 50 --p_edge 0.1  # requires Python ≤3.12
 ```
 
 ## Project layout
