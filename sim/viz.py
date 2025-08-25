@@ -4,6 +4,7 @@ import argparse
 
 import solara as sl
 from mesa.visualization import SolaraViz
+from solara.server import app as solara_app
 
 from sim.model import TradeModel
 
@@ -38,5 +39,5 @@ if __name__ == "__main__":
     parser.add_argument("--p_edge", type=float, default=0.1, help="Edge probability")
     args = parser.parse_args()
 
-    sl.run(build_app(args.agents, args.p_edge))
+    solara_app.AppScript(build_app(args.agents, args.p_edge)).run()
 
