@@ -4,11 +4,18 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, Tuple
 import random
+
 import networkx as nx
-from mesa import Agent, Model
-from mesa.space import NetworkGrid
-from mesa.time import RandomActivation
-from mesa.datacollection import DataCollector
+
+try:  # pragma: no cover - import failure is a runtime concern
+    from mesa import Agent, Model
+    from mesa.space import NetworkGrid
+    from mesa.datacollection import DataCollector
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Mesa is required to run this simulation. Install it with"
+        " 'pip install -r requirements.txt'."
+    ) from exc
 
 
 Goods = Tuple[str, str]  # e.g., ('wheat', 'iron')
@@ -22,8 +29,8 @@ class Offer:
 
 
 class Trader(Agent):
-    def __init__(self, unique_id, model: "TradeModel", specialty: str):
-        super().__init__(unique_id, model)
+    def __init__(self, model: "TradeModel", specialty: str):
+        super().__init__(model)
         self.specialty = specialty  # the good this agent produces cheaper
         self.capital: float = 100.0
         self.inventory: Dict[str, int] = {g: 0 for g in model.goods}
@@ -48,11 +55,10 @@ class Trader(Agent):
         self.production()
 
         # 2) pick a neighbor to trade with
-        neighbors = self.model.grid.get_neighbors(self.unique_id, include_center=False)
+        neighbors = self.model.grid.get_neighbors(self.pos, include_center=False)
         if not neighbors:
             return
-        partner_id = random.choice(neighbors)
-        partner = self.model.grid.get_cell_list_contents([partner_id])[0]
+        partner = random.choice(neighbors)
 
         # 3) choose desired good (not your specialty) and attempt trade
         wants = [g for g in self.model.goods if g != self.specialty]
@@ -91,26 +97,24 @@ class TradeModel(Model):
         self.goods = goods
         self.G = nx.erdos_renyi_graph(N, p_edge, seed=seed)
         self.grid = NetworkGrid(self.G)
-        self.schedule = RandomActivation(self)
         self.trades_this_tick = 0
 
         # create agents, half specialize in good0, half in good1
         for i in range(N):
             specialty = goods[i % len(goods)]
-            a = Trader(i, self, specialty=specialty)
-            self.schedule.add(a)
+            a = Trader(self, specialty=specialty)
             self.grid.place_agent(a, i)
 
         self.datacollector = DataCollector(
             model_reporters={
-                "avg_capital": lambda m: sum(a.capital for a in m.schedule.agents) / len(m.schedule.agents),
+                "avg_capital": lambda m: sum(a.capital for a in m.agents) / len(m.agents),
                 "trade_volume": lambda m: m.trades_this_tick,
                 "gini_capital": self._gini_capital,
             }
         )
 
     def _gini_capital(self) -> float:
-        vals = sorted([a.capital for a in self.schedule.agents])
+        vals = sorted([a.capital for a in self.agents])
         n = len(vals)
         if n == 0:
             return 0.0
@@ -121,5 +125,5 @@ class TradeModel(Model):
 
     def step(self) -> None:
         self.trades_this_tick = 0
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         self.datacollector.collect(self)
