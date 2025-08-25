@@ -1,45 +1,42 @@
+"""Solara-based visualization for the TradeModel."""
 
-try:
-    from mesa.visualization.modules import NetworkModule, ChartModule
-    from mesa.visualization.ModularVisualization import ModularServer
-    from mesa.visualization.UserParam import UserSettableParameter
-except ModuleNotFoundError as e:
-    raise ModuleNotFoundError(
-        "Mesa visualization components are missing. "
-        "Please install the 'mesa-visualization' package and its dependencies, e.g. matplotlib."
-    ) from e
+import argparse
+
+import solara as sl
+from mesa.visualization import SolaraViz
+
 from sim.model import TradeModel
 
-def network_portrayal(G):
-    def node_color(agent):
-        return "#1f77b4" if agent.specialty == "wheat" else "#ff7f0e"
 
-    portrayal = {"nodes": [], "edges": []}
-    for (a, b) in G.edges:
-        portrayal["edges"].append({"source": a, "target": b, "color": "#cccccc"})
-    for node_id in G.nodes:
-        agents = G.nodes[node_id].get("agent", [])
-        color = "#888888"
-        if agents:
-            color = node_color(agents[0])
-        portrayal["nodes"].append({"id": node_id, "size": 6, "color": color})
-    return portrayal
+def build_app(agents: int = 50, p_edge: float = 0.1):
+    """Create a Solara page hosting the Mesa visualization."""
 
-def launch(agents=50, p_edge=0.1):
-    # Note: NetworkModule expects a function that maps G->portrayal
-    network = NetworkModule(network_portrayal, 800, 600)
-    chart = ChartModule(
-        [{"Label": "avg_capital", "Color": "black"},
-         {"Label": "trade_volume", "Color": "green"}],
-        data_collector_name="datacollector",
-    )
-    model_params = {
-        "N": UserSettableParameter("slider", "Agents", agents, 10, 300, 10),
-        "p_edge": UserSettableParameter("slider", "Edge Prob", p_edge, 0.01, 0.5, 0.01),
-    }
-    server = ModularServer(TradeModel, [network, chart], "Two-Goods Trade", model_params)
-    server.port = 8521
-    server.launch()
+    @sl.component
+    def Page():
+        viz = SolaraViz(
+            model_cls=TradeModel,
+            model_params={"N": agents, "p_edge": p_edge},
+            measures=[
+                ("avg_capital", "Average Capital"),
+                ("trade_volume", "Trades per Tick"),
+            ],
+        )
+        viz.render()
+
+    return Page
+
+
+# Default app so "solara run sim/viz.py" works out of the box
+app = build_app()
+
 
 if __name__ == "__main__":
-    launch()
+    parser = argparse.ArgumentParser(
+        description="Launch Solara visualization for the TradeModel"
+    )
+    parser.add_argument("--agents", type=int, default=50, help="Number of agents")
+    parser.add_argument("--p_edge", type=float, default=0.1, help="Edge probability")
+    args = parser.parse_args()
+
+    sl.run(build_app(args.agents, args.p_edge))
+

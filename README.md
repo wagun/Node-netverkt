@@ -10,7 +10,7 @@ A minimal, git-ready starter for a two-goods trade & information-flow simulation
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -U pip
-pip install -r requirements.txt  # installs Mesa with visualization extras
+pip install -r requirements.txt  # installs Mesa with Solara extras
 python -m sim.run --steps 50 --agents 50 --p_edge 0.1
 ```
 
@@ -22,7 +22,7 @@ poetry run python -m sim.run --steps 50 --agents 50 --p_edge 0.1
 
 ## Run with visualization (optional)
 ```bash
-python -m sim.viz --agents 50 --p_edge 0.1  # requires Python ≤3.12
+python -m sim.viz --agents 50 --p_edge 0.1  # launches Solara viz (Python ≤3.12)
 ```
 
 ## Project layout
@@ -40,5 +40,5 @@ pyproject.toml  (optional Poetry)
 
 ## Notes
 - `run.py` runs a headless simulation and prints a small summary.
-- `viz.py` launches Mesa's web server with a simple network visualization, handy for debugging.
+- `viz.py` launches a Solara-based network visualization, handy for debugging.
 - This is intentionally small; extend agent rules, add price formation, and write events to Parquet/DuckDB as you go.
