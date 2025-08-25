@@ -6,6 +6,8 @@ import solara as sl
 from mesa.visualization import SolaraViz
 from solara.server import app as solara_app
 
+import sys, pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from sim.model import TradeModel
 
 
