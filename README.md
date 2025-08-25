@@ -22,8 +22,9 @@ poetry run python -m sim.run --steps 50 --agents 50 --p_edge 0.1
 
 ## Run with visualization (optional)
 ```bash
-python -m sim.viz --agents 50 --p_edge 0.1  # launches Solara viz (Python ≤3.12)
+solara run sim/viz.py -- --agents 50 --p_edge 0.1  # launches Solara viz (Python ≤3.12)
 ```
+Note: `solara run` is required because `solara.run` is deprecated.
 
 ## Project layout
 ```
