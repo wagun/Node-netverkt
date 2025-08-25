@@ -39,7 +39,11 @@ if __name__ == "__main__":
     )
     parser.add_argument("--agents", type=int, default=50, help="Number of agents")
     parser.add_argument("--p_edge", type=float, default=0.1, help="Edge probability")
-    args = parser.parse_args()
+    if "--" in sys.argv:
+        idx = sys.argv.index("--")
+        args = parser.parse_args(sys.argv[idx + 1 :])
+    else:
+        args = parser.parse_args([])
 
     solara_app.AppScript(build_app(args.agents, args.p_edge)).run()
 
